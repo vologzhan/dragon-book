@@ -7,7 +7,7 @@ import (
 )
 
 type Lexer struct {
-	reader io.ByteReader
+	reader io.ByteScanner
 	peek   byte
 	line   int
 	words  map[string]Word
@@ -32,6 +32,15 @@ func (l *Lexer) Scan() interface{} {
 			// nothing
 		} else if l.peek == '\n' {
 			l.line++
+		} else if l.peek == '/' {
+			prev := l.peek
+			l.peek, _ = l.reader.ReadByte()
+			if l.peek != '/' {
+				_ = l.reader.UnreadByte()
+				l.peek = prev
+				break
+			}
+			l.skipLine()
 		} else {
 			break
 		}
@@ -82,6 +91,18 @@ func (l *Lexer) reserve(tag Tag, lexeme string) Word {
 	l.words[lexeme] = w
 
 	return w
+}
+
+func (l *Lexer) skipLine() {
+	for ; ; l.peek, _ = l.reader.ReadByte() {
+		switch l.peek {
+		case '\n':
+			l.line++
+			return
+		case 0:
+			return
+		}
+	}
 }
 
 func isDigit(b byte) bool {

@@ -11,20 +11,36 @@ func TestLexer(t *testing.T) {
 		input    string
 		expected interface{}
 	}{
+		"empty": {
+			"",
+			[]interface{}(nil),
+		},
 		"expr": {
 			"1+23",
 			[]interface{}{
-				Num{Token{TagNum}, 1},
-				Token{'+'},
-				Num{Token{TagNum}, 23},
+				newNum(1),
+				newToken('+'),
+				newNum(23),
 			},
 		},
 		"expr_with_whitespaces": {
 			" a -  bc ",
 			[]interface{}{
-				Word{Token{TagId}, "a"},
-				Token{'-'},
-				Word{Token{TagId}, "bc"},
+				newWord(TagId, "a"),
+				newToken('-'),
+				newWord(TagId, "bc"),
+			},
+		},
+		"comment_single_line": {
+			"// comment",
+			[]interface{}(nil),
+		},
+		"comment_single_line_after_expr": {
+			"a+b // comment",
+			[]interface{}{
+				newWord(TagId, "a"),
+				newToken('+'),
+				newWord(TagId, "b"),
 			},
 		},
 	} {
