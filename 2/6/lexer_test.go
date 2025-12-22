@@ -36,11 +36,19 @@ func TestLexer(t *testing.T) {
 			[]interface{}(nil),
 		},
 		"comment_single_line_after_expr": {
-			"a+b // comment",
+			"1 // comment",
 			[]interface{}{
-				newWord(TagId, "a"),
-				newToken('+'),
-				newWord(TagId, "b"),
+				newNum(1),
+			},
+		},
+		"comment_multiline": {
+			`4/*
+*/ / /*
+*/2`,
+			[]interface{}{
+				newNum(4),
+				newToken('/'),
+				newNum(2),
 			},
 		},
 	} {

@@ -35,12 +35,16 @@ func (l *Lexer) Scan() interface{} {
 		} else if l.peek == '/' {
 			prev := l.peek
 			l.peek, _ = l.reader.ReadByte()
-			if l.peek != '/' {
+
+			if l.peek == '/' {
+				l.skipComment()
+			} else if l.peek == '*' {
+				l.skipMultilineComment()
+			} else {
 				_ = l.reader.UnreadByte()
 				l.peek = prev
 				break
 			}
-			l.skipLine()
 		} else {
 			break
 		}
@@ -93,12 +97,31 @@ func (l *Lexer) reserve(tag Tag, lexeme string) Word {
 	return w
 }
 
-func (l *Lexer) skipLine() {
+func (l *Lexer) skipComment() {
 	for ; ; l.peek, _ = l.reader.ReadByte() {
 		switch l.peek {
 		case '\n':
 			l.line++
 			return
+		case 0:
+			return
+		}
+	}
+}
+
+func (l *Lexer) skipMultilineComment() {
+	for ; ; l.peek, _ = l.reader.ReadByte() {
+		switch l.peek {
+		case '\n':
+			l.line++
+		case '*':
+			l.peek, _ = l.reader.ReadByte()
+			if l.peek == '/' {
+				return
+			}
+			if l.peek == '\n' {
+				l.line++
+			}
 		case 0:
 			return
 		}
