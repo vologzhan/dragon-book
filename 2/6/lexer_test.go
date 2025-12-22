@@ -17,19 +17,11 @@ func TestLexer(t *testing.T) {
 		},
 		"expr": {
 			"1+23",
-			[]interface{}{
-				newNum(1),
-				newToken('+'),
-				newNum(23),
-			},
+			[]interface{}{newNum(1), newToken('+'), newNum(23)},
 		},
 		"expr_with_whitespaces": {
 			" a -  bc ",
-			[]interface{}{
-				newWord(TagId, "a"),
-				newToken('-'),
-				newWord(TagId, "bc"),
-			},
+			[]interface{}{newWord(TagId, "a"), newToken('-'), newWord(TagId, "bc")},
 		},
 		"comment_single_line": {
 			"// comment",
@@ -37,37 +29,49 @@ func TestLexer(t *testing.T) {
 		},
 		"comment_single_line_after_expr": {
 			"1 // comment",
-			[]interface{}{
-				newNum(1),
-			},
+			[]interface{}{newNum(1)},
 		},
 		"comment_multiline": {
 			`4/*
 */ / /*
 */2`,
-			[]interface{}{
-				newNum(4),
-				newToken('/'),
-				newNum(2),
-			},
+			[]interface{}{newNum(4), newToken('/'), newNum(2)},
 		},
 		"float": {
 			"3.14",
-			[]interface{}{
-				newFloat(3.14),
-			},
+			[]interface{}{newFloat(3.14)},
 		},
 		"float_suffix": {
 			"2.",
-			[]interface{}{
-				newFloat(2.),
-			},
+			[]interface{}{newFloat(2.)},
 		},
 		"float_prefix": {
 			".5",
-			[]interface{}{
-				newFloat(.5),
-			},
+			[]interface{}{newFloat(.5)},
+		},
+		"less": {
+			"<",
+			[]interface{}{newToken(TagLess)},
+		},
+		"less_or_equal": {
+			"<=",
+			[]interface{}{newToken(TagLessOrEqual)},
+		},
+		"greater": {
+			">",
+			[]interface{}{newToken(TagGreater)},
+		},
+		"greater_or_equal": {
+			">=",
+			[]interface{}{newToken(TagGreaterOrEqual)},
+		},
+		"equal": {
+			"==",
+			[]interface{}{newToken(TagEqual)},
+		},
+		"not_equal": {
+			"!=",
+			[]interface{}{newToken(TagNotEqual)},
 		},
 	} {
 		t.Run(name, func(t *testing.T) {
