@@ -12,19 +12,19 @@ func TestLexer(t *testing.T) {
 		expected interface{}
 	}{
 		"expr": {
-			"1+2",
+			"1+23",
 			[]interface{}{
 				Num{Token{TagNum}, 1},
 				Token{'+'},
-				Num{Token{TagNum}, 2},
+				Num{Token{TagNum}, 23},
 			},
 		},
 		"expr_with_whitespaces": {
-			"a -  b",
+			" a -  bc ",
 			[]interface{}{
 				Word{Token{TagId}, "a"},
 				Token{'-'},
-				Word{Token{TagId}, "b"},
+				Word{Token{TagId}, "bc"},
 			},
 		},
 	} {
