@@ -5,6 +5,7 @@ type Tag int
 const (
 	TagEof Tag = 0
 	TagNum Tag = iota + 256
+	TagFloat
 	TagId
 	TagTrue
 	TagFalse
@@ -25,6 +26,15 @@ type Num struct {
 
 func newNum(v int) Num {
 	return Num{newToken(TagNum), v}
+}
+
+type Float struct {
+	Token
+	Value float64
+}
+
+func newFloat(v float64) Float {
+	return Float{newToken(TagFloat), v}
 }
 
 type Word struct {

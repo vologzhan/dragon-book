@@ -9,7 +9,7 @@ import (
 func TestLexer(t *testing.T) {
 	for name, tt := range map[string]struct {
 		input    string
-		expected interface{}
+		expected []interface{}
 	}{
 		"empty": {
 			"",
@@ -49,6 +49,24 @@ func TestLexer(t *testing.T) {
 				newNum(4),
 				newToken('/'),
 				newNum(2),
+			},
+		},
+		"float": {
+			"3.14",
+			[]interface{}{
+				newFloat(3.14),
+			},
+		},
+		"float_suffix": {
+			"2.",
+			[]interface{}{
+				newFloat(2.),
+			},
+		},
+		"float_prefix": {
+			".5",
+			[]interface{}{
+				newFloat(.5),
 			},
 		},
 	} {
