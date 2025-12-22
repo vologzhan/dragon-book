@@ -1,4 +1,4 @@
-package example
+package lexer
 
 import (
 	"bytes"
@@ -6,54 +6,31 @@ import (
 	"strings"
 )
 
-type Tag int
-
-const (
-	TagEof Tag = 0
-	TagNum Tag = iota + 256
-	TagId
-	TagTrue
-	TagFalse
-)
-
-type Token struct {
-	Tag
-}
-
-type Num struct {
-	Token
-	Value int
-}
-
-type Word struct {
-	Token
-	Lexeme string
-}
-
-func NewLexer(buf string) *Lexer {
-	l := &Lexer{
-		reader: strings.NewReader(buf),
-		line:   1,
-		words:  map[string]Word{},
-	}
-	_ = l.newWord(TagTrue, "true")
-	_ = l.newWord(TagFalse, "false")
-
-	return l
-}
-
 type Lexer struct {
 	reader io.ByteReader
+	peek   byte
 	line   int
 	words  map[string]Word
 }
 
+func NewLexer(buf string) *Lexer {
+	l := &Lexer{
+		strings.NewReader(buf),
+		' ',
+		1,
+		map[string]Word{},
+	}
+	_ = l.reserve(TagTrue, "true")
+	_ = l.reserve(TagFalse, "false")
+
+	return l
+}
+
 func (l *Lexer) Scan() interface{} {
-	var peek byte = ' '
-	for ; ; peek, _ = l.reader.ReadByte() {
-		if peek == ' ' || peek == '\t' {
+	for ; ; l.peek, _ = l.reader.ReadByte() {
+		if l.peek == ' ' || l.peek == '\t' {
 			// nothing
-		} else if peek == '\n' {
+		} else if l.peek == '\n' {
 			l.line++
 		} else {
 			break
@@ -61,22 +38,17 @@ func (l *Lexer) Scan() interface{} {
 	}
 
 	switch {
-	case isDigit(peek):
+	case isDigit(l.peek):
 		v := 0
-		for ; isDigit(peek); peek, _ = l.reader.ReadByte() {
-			v = 10*v + int(peek-'0')
+		for ; isDigit(l.peek); l.peek, _ = l.reader.ReadByte() {
+			v = 10*v + int(l.peek-'0')
 		}
 
-		return Num{
-			Token: Token{
-				Tag: TagNum,
-			},
-			Value: v,
-		}
-	case isLetter(peek):
+		return newNum(v)
+	case isLetter(l.peek):
 		buf := bytes.Buffer{}
-		for ; isLetter(peek) || isDigit(peek); peek, _ = l.reader.ReadByte() {
-			buf.WriteByte(peek)
+		for ; isLetter(l.peek) || isDigit(l.peek); l.peek, _ = l.reader.ReadByte() {
+			buf.WriteByte(l.peek)
 		}
 
 		lexeme := buf.String()
@@ -84,16 +56,17 @@ func (l *Lexer) Scan() interface{} {
 			return word
 		}
 
-		return l.newWord(TagId, lexeme)
+		return l.reserve(TagId, lexeme)
 	default:
-		return Token{
-			Tag: Tag(peek),
-		}
+		t := newToken(Tag(l.peek))
+		l.peek = ' '
+
+		return t
 	}
 }
 
 func (l *Lexer) ScanAll() []interface{} {
-	eof := Token{TagEof}
+	eof := newToken(TagEof)
 	var buf []interface{}
 	for {
 		t := l.Scan()
@@ -104,13 +77,8 @@ func (l *Lexer) ScanAll() []interface{} {
 	}
 }
 
-func (l *Lexer) newWord(tag Tag, lexeme string) Word {
-	w := Word{
-		Token: Token{
-			Tag: tag,
-		},
-		Lexeme: lexeme,
-	}
+func (l *Lexer) reserve(tag Tag, lexeme string) Word {
+	w := newWord(tag, lexeme)
 	l.words[lexeme] = w
 
 	return w
