@@ -1,4 +1,4 @@
-package lexer
+package lexer_with_tokens
 
 import (
 	"testing"
@@ -6,7 +6,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestLexer(t *testing.T) {
+func TestLexerWithTokens(t *testing.T) {
 	for name, tt := range map[string]struct {
 		input    string
 		expected []interface{}

@@ -1,22 +1,22 @@
 package symbol_table
 
-type Env struct {
+type env struct {
 	table map[string]string
-	prev  *Env
+	prev  *env
 }
 
-func NewEnv(prev *Env) *Env {
-	return &Env{
+func newEnv(prev *env) *env {
+	return &env{
 		make(map[string]string),
 		prev,
 	}
 }
 
-func (e *Env) Put(k string, v string) {
+func (e *env) put(k string, v string) {
 	e.table[k] = v
 }
 
-func (e *Env) Get(k string) string {
+func (e *env) get(k string) string {
 	for current := e; current != nil; current = current.prev {
 		if v, ok := current.table[k]; ok {
 			return v

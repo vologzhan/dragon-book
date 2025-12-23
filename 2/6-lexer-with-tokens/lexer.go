@@ -1,4 +1,4 @@
-package lexer
+package lexer_with_tokens
 
 import (
 	"bytes"

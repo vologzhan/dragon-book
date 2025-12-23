@@ -1,4 +1,4 @@
-package symbol_table
+package lexer
 
 import (
 	"bytes"
@@ -7,12 +7,16 @@ import (
 	"strings"
 )
 
+type Interface interface {
+	Next() string
+}
+
 type Lexer struct {
 	buf  io.ByteReader
 	peek byte
 }
 
-func NewLexer(buf string) *Lexer {
+func New(buf string) *Lexer {
 	return &Lexer{
 		strings.NewReader(buf),
 		' ',
