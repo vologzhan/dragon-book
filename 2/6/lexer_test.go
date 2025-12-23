@@ -16,8 +16,8 @@ func TestLexer(t *testing.T) {
 			[]interface{}(nil),
 		},
 		"expr": {
-			"1+23",
-			[]interface{}{newNum(1), newToken('+'), newNum(23)},
+			"10=1+9",
+			[]interface{}{newNum(10), newToken('='), newNum(1), newToken('+'), newNum(9)},
 		},
 		"expr_with_whitespaces": {
 			" a -  bc ",
@@ -37,6 +37,10 @@ func TestLexer(t *testing.T) {
 */2`,
 			[]interface{}{newNum(4), newToken('/'), newNum(2)},
 		},
+		"division": {
+			"/",
+			[]interface{}{newToken('/')},
+		},
 		"float": {
 			"3.14",
 			[]interface{}{newFloat(3.14)},
@@ -51,7 +55,7 @@ func TestLexer(t *testing.T) {
 		},
 		"less": {
 			"<",
-			[]interface{}{newToken(TagLess)},
+			[]interface{}{newToken('<')},
 		},
 		"less_or_equal": {
 			"<=",
@@ -59,7 +63,7 @@ func TestLexer(t *testing.T) {
 		},
 		"greater": {
 			">",
-			[]interface{}{newToken(TagGreater)},
+			[]interface{}{newToken('>')},
 		},
 		"greater_or_equal": {
 			">=",

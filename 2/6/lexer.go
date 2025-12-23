@@ -43,12 +43,33 @@ func (l *Lexer) Scan() interface{} {
 			} else if l.match('*') {
 				l.scanMultilineComment()
 			} else {
-				l.prev()
-				l.peek = prev
-				break
+				return newToken(Tag(prev))
 			}
 		} else if l.match('.') {
 			return l.scanMantissa(0)
+		} else if l.match('=') || l.match('!') || l.match('<') || l.match('>') {
+			prev := l.peek
+			l.next()
+
+			if !l.match('=') {
+				return newToken(Tag(prev))
+			}
+
+			var tok Token
+			switch prev {
+			case '=':
+				tok = newToken(TagEqual)
+			case '!':
+				tok = newToken(TagNotEqual)
+			case '<':
+				tok = newToken(TagLessOrEqual)
+			case '>':
+				tok = newToken(TagGreaterOrEqual)
+			}
+
+			l.peek = ' '
+
+			return tok
 		} else {
 			break
 		}

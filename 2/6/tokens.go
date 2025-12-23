@@ -6,9 +6,7 @@ const (
 	TagEof Tag = 0
 	TagNum Tag = iota + 256
 	TagFloat
-	TagLess
 	TagLessOrEqual
-	TagGreater
 	TagGreaterOrEqual
 	TagEqual
 	TagNotEqual
