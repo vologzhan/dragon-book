@@ -1,4 +1,4 @@
-package union
+package translation_diagram
 
 import "strings"
 

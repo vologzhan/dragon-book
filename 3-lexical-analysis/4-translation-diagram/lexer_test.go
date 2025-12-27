@@ -1,4 +1,4 @@
-package union
+package translation_diagram
 
 import (
 	"testing"
@@ -6,7 +6,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestUnionTransitionDiagram(t *testing.T) {
+func TestTransitionDiagram(t *testing.T) {
 	assert.Equal(t, []interface{}{
 		KeyWord(IF),
 		KeyWord(THEN),
