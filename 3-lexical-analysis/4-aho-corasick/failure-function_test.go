@@ -18,3 +18,17 @@ func TestAhoCorasickFailureFunction(t *testing.T) {
 		})
 	}
 }
+
+func TestAhoCorasickSearch(t *testing.T) {
+	for input, expected := range map[string]bool{
+		"ababaa":     true,
+		"aabbababaa": true,
+		"abababaab":  true,
+		"ababa":      false,
+		"abababbaa":  false,
+	} {
+		t.Run(input, func(t *testing.T) {
+			assert.Equal(t, expected, search(input, "ababaa"))
+		})
+	}
+}

@@ -5,17 +5,37 @@ import (
 	"fmt"
 )
 
+func search(str string, pattern string) bool {
+	f := getFailureFunction(pattern)
+	n := len(pattern)
+	s := 0
+
+	for i := 0; i < len(str); i++ {
+		for s > 0 && str[i] != pattern[s] {
+			s = f[s-1]
+		}
+		if str[i] == pattern[s] {
+			s++
+		}
+		if s == n {
+			return true
+		}
+	}
+
+	return false
+}
+
 // getFailureFunction Knuth-Morris-Pratt algorithm
-func getFailureFunction(str string) []int {
-	n := len(str)
+func getFailureFunction(pattern string) []int {
+	n := len(pattern)
 	f := make([]int, n)
 	t := 0
 
 	for s := 1; s < n; s++ {
-		for t > 0 && str[s] != str[t] {
+		for t > 0 && pattern[s] != pattern[t] {
 			t = f[t-1]
 		}
-		if str[s] == str[t] {
+		if pattern[s] == pattern[t] {
 			t++
 		}
 		f[s] = t
