@@ -1,6 +1,7 @@
 package aho_corasick
 
 import (
+	"strconv"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -29,6 +30,24 @@ func TestAhoCorasickSearch(t *testing.T) {
 	} {
 		t.Run(input, func(t *testing.T) {
 			assert.Equal(t, expected, search(input, "ababaa"))
+		})
+	}
+}
+
+func TestFibonacciString(t *testing.T) {
+	for input, expected := range map[string]string{
+		"1": "b",
+		"2": "a",
+		"3": "ab",
+		"4": "aba",
+		"5": "abaab",
+		"6": "abaababa",
+		"7": "abaababaabaab",
+		"8": "abaababaabaababaababa",
+	} {
+		t.Run(input, func(t *testing.T) {
+			s, _ := strconv.Atoi(input)
+			assert.Equal(t, expected, getFibonacciString(s))
 		})
 	}
 }

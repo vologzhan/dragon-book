@@ -59,3 +59,20 @@ func printFailureFunction(str string, f []int) {
 	fmt.Println(sBuilder.String())
 	fmt.Println(fBuilder.String())
 }
+
+func getFibonacciString(n int) string {
+	if n < 1 {
+		return ""
+	}
+
+	f1, f2 := "b", "a"
+	if n == 1 {
+		return f1
+	}
+
+	for i := 2; i < n; i++ {
+		f1, f2 = f2, f2+f1
+	}
+
+	return f2
+}
