@@ -1,4 +1,4 @@
-package aho_corasick
+package knuth_morris_pratt
 
 import (
 	"strconv"
@@ -7,7 +7,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestAhoCorasickFailureFunction(t *testing.T) {
+func TestKmpFailureFunction(t *testing.T) {
 	for input, expected := range map[string][]int{
 		"ababaa":    {0, 0, 1, 2, 3, 1},
 		"abababaab": {0, 0, 1, 2, 3, 4, 5, 1, 2},
@@ -20,7 +20,7 @@ func TestAhoCorasickFailureFunction(t *testing.T) {
 	}
 }
 
-func TestAhoCorasickSearch(t *testing.T) {
+func TestKmpSearch(t *testing.T) {
 	for input, expected := range map[string]bool{
 		"ababaa":     true,
 		"aabbababaa": true,
@@ -52,7 +52,7 @@ func TestFibonacciString(t *testing.T) {
 	}
 }
 
-func TestFailureFunctionFibonacci(t *testing.T) {
+func TestKmpFailureFunctionFibonacci(t *testing.T) {
 	for input, expected := range map[string][]int{
 		"abaababa":      {0, 0, 1, 1, 2, 3, 2, 3},
 		"abaababaabaab": {0, 0, 1, 1, 2, 3, 2, 3, 4, 5, 6, 4, 5},

@@ -1,4 +1,4 @@
-package aho_corasick
+package knuth_morris_pratt
 
 import (
 	"bytes"
@@ -25,7 +25,6 @@ func search(str string, pattern string) bool {
 	return false
 }
 
-// getFailureFunction Knuth-Morris-Pratt algorithm
 func getFailureFunction(pattern string) []int {
 	n := len(pattern)
 	f := make([]int, n)
