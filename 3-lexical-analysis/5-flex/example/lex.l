@@ -1,17 +1,18 @@
 %{
 /* Определения именованных констант */
-#define LT 1
-#define LE 2
-#define EQ 3
-#define NE 4
-#define GT 5
-#define GE 6
-#define IF 7
-#define THEN 8
-#define ELSE 9
-#define ID 10
-#define NUMBER 11
-#define RELOP 12
+#define LT      1
+#define LE      2
+#define EQ      3
+#define NE      4
+#define GT      5
+#define GE      6
+#define IF      7
+#define THEN    8
+#define ELSE    9
+#define WHILE   10
+#define ID      11
+#define NUMBER  12
+#define RELOP   13
 
 int yylval;
 
@@ -34,6 +35,7 @@ number  {digit}+(\.{digit}+)?(E[+-]?{digit}+)?
 if         {return(IF);}
 then       {return(THEN);}
 else       {return(ELSE);}
+while      {return(WHILE);}
 {id}       {yylval = (int) installID(); return(ID);}
 {number}   {yylval = (int) installNum(); return(NUMBER);}
 "<"        {yylval = LT; return(RELOP);}
