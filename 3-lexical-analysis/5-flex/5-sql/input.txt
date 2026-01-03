@@ -1,0 +1,1 @@
+sEleCT name2 FrOm users WHere TRUE;
