@@ -1,0 +1,4 @@
+int main() {
+    float myVar;
+    return 0;
+}
