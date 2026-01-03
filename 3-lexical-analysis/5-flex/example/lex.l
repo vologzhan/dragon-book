@@ -26,7 +26,7 @@ delim   [ \t\n]
 ws      {delim}+
 letter  [A-Za-z]
 digit   [0-9]
-id      {letter}({letter}|{digit})*
+id      {letter}({letter}|{digit}|_)*
 number  {digit}+(\.{digit}+)?(E[+-]?{digit}+)?
 
 %%
@@ -41,7 +41,7 @@ while      {return(WHILE);}
 "<"        {yylval = LT; return(RELOP);}
 "<="       {yylval = LE; return(RELOP);}
 "="        {yylval = EQ; return(RELOP);}
-"<>"       {yylval = NE; return(RELOP);}
+"!="       {yylval = NE; return(RELOP);}
 ">"        {yylval = GT; return(RELOP);}
 ">="       {yylval = GE; return(RELOP);}
 
