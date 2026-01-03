@@ -12,13 +12,15 @@
 #define WHILE   10
 #define ID      11
 #define NUMBER  12
-#define RELOP   13
+#define STRING  13
+#define RELOP   14
 
 int yylval;
 
 /* Прототипы функций */
-int installID();
+int installId();
 int installNum();
+int installString();
 %}
 
 /* Регулярные определения */
@@ -28,6 +30,7 @@ letter  [A-Za-z]
 digit   [0-9]
 id      {letter}({letter}|{digit}|_)*
 number  {digit}+(\.{digit}+)?(E[+-]?{digit}+)?
+string  \".*\"
 
 %%
 
@@ -36,25 +39,50 @@ if         {return(IF);}
 then       {return(THEN);}
 else       {return(ELSE);}
 while      {return(WHILE);}
-{id}       {yylval = (int) installID(); return(ID);}
-{number}   {yylval = (int) installNum(); return(NUMBER);}
-"<"        {yylval = LT; return(RELOP);}
-"<="       {yylval = LE; return(RELOP);}
-"="        {yylval = EQ; return(RELOP);}
-"!="       {yylval = NE; return(RELOP);}
-">"        {yylval = GT; return(RELOP);}
-">="       {yylval = GE; return(RELOP);}
+{id}       {yylval = installId();     return(ID);     }
+{number}   {yylval = installNum();    return(NUMBER); }
+{string}   {yylval = installString(); return(STRING); }
+"<"        {yylval = LT;              return(RELOP);  }
+"<="       {yylval = LE;              return(RELOP);  }
+"="        {yylval = EQ;              return(RELOP);  }
+"!="       {yylval = NE;              return(RELOP);  }
+">"        {yylval = GT;              return(RELOP);  }
+">="       {yylval = GE;              return(RELOP);  }
 
 %%
 
 /* Реализация функций */
-int installID() {
+int installId() {
     printf("[ID: %s] ", yytext);
     return 0;
 }
 
 int installNum() {
     printf("[NUM: %s] ", yytext);
+    return 0;
+}
+
+int installString() {
+    char *src = yytext;
+    char *dst = yytext;
+
+    *src++;
+    while (*src) {
+        if (*src == '"' && *(src+1) == '\0') {
+            *dst = '\0';
+            break;
+        }
+
+        if (*src == '\\' && *(src+1) == '"') {
+            *dst++ = '"';
+            src += 2;
+        } else {
+            *dst++ = *src++;
+        }
+    }
+
+    printf("[STRING: %s] ", yytext);
+
     return 0;
 }
 

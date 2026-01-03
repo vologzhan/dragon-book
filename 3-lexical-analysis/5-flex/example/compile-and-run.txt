@@ -1,1 +1,0 @@
-flex -t lex.l | gcc -x c - -o /tmp/a.out && /tmp/a.out
